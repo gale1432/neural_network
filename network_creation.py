@@ -1,18 +1,46 @@
 import numpy as np
 import joblib
+import random
 import fuzzy_system
+
+def nguyen_widrow(input_units, hidden_units):
+    return 0.7*hidden_units**(1/input_units)
+
+def create_initial_weights(input_units, hidden_units, beta):
+    weight_matrix = list()
+    for i in range(hidden_units):
+        cocaine_line = list()
+        for j in range(input_units):
+            weight = random.uniform(-beta, beta)
+            cocaine_line.append(weight)
+        weight_matrix.append(np.array(cocaine_line, dtype=np.float64))
+    return np.array(weight_matrix)
+
+def create_initial_biases(hidden_units, beta):
+    bias_list = list()
+    for i in range(hidden_units):
+        bias_list.append(np.array([random.uniform(-beta, beta)]))
+    return np.array(bias_list)
+
+def get_inital_weights_biases(input_units, hidden_units):
+    beta = nguyen_widrow(input_units, hidden_units)
+    return create_initial_weights(input_units, hidden_units, beta), create_initial_biases(hidden_units, beta)
 
 class FinalNetwork:
     def __init__(self):
-        self.W1 = np.random.rand(20, 550) - 0.5
+        """self.W1 = np.random.rand(20, 550) - 0.5
         self.b1 = np.random.rand(20, 1) - 0.5
         self.W2 = np.random.rand(30, 20) - 0.5
         self.b2 = np.random.rand(30, 1) - 0.5
         self.W3 = np.random.rand(11, 30) -0.5 #11
-        self.b3 = np.random.rand(11, 1) - 0.5 #11
+        self.b3 = np.random.rand(11, 1) - 0.5 #11"""
+        self.W1, self.b1 = get_inital_weights_biases(550, 20)
+        self.W2, self.b2 = get_inital_weights_biases(20, 30)
+        self.W3, self.b3 = get_inital_weights_biases(30, 11)
         self.weight_system = fuzzy_system.WeightInferenceSystem()
         self.bias_system = fuzzy_system.BiasInferenceSystem()
         self.weight_dict = dict()
+        self.kk = list()
 
     def relu(self, Z):
         return np.maximum(0, Z)
@@ -53,22 +81,22 @@ class FinalNetwork:
         db1 = (1/m)*np.sum(dZ1)
         return dW1, db1, dW2, db2, dW3, db3
     ## METHOD OF UPDATE THAT DOESNT USE FUZZY LOGIC
-    """def update_params(self, dW1, db1, dW2, db2, dW3, db3, alpha):
+    def update_params(self, dW1, db1, dW2, db2, dW3, db3, alpha):
         self.W1 = self.W1 - alpha * dW1
         self.b1 = self.b1 - alpha * db1
         self.W2 = self.W2 - alpha * dW2
         self.b2 = self.b2 - alpha * db2
         self.W3 = self.W3 - alpha * dW3
-        self.b3 = self.b3 - alpha * db3"""
+        self.b3 = self.b3 - alpha * db3
 
     ## METHOD OF UPDATE THAT USES FUZZY INFERENCE SYSTEMS
-    def update_params(self, dW1, db1, dW2, db2, dW3, db3, alpha):
+    """def update_params(self, dW1, db1, dW2, db2, dW3, db3, alpha):
         self.W1 = self.weight_system.weight_change_all(self.W1, alpha*dW1)
         self.b1 = self.bias_system.bias_change_all(self.b1, alpha*db1)
         self.W2 = self.weight_system.weight_change_all(self.W2, alpha*dW2)
         self.b2 = self.bias_system.bias_change_all(self.b2, alpha*db2)
         self.W3 = self.weight_system.weight_change_all(self.W3, alpha*dW3)
-        self.b3 = self.bias_system.bias_change_all(self.b3, alpha*db3, last_layer_bias=True)
+        self.b3 = self.bias_system.bias_change_all(self.b3, alpha*db3, last_layer_bias=True)"""
 
     def save_weights(self, dW1, db1, dW2, db2, dW3, db3, iter_number):
         self.weight_dict[str(iter_number)] = dict()

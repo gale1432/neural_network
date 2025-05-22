@@ -5,17 +5,17 @@ from skfuzzy import control as ctrl
 class WeightInferenceSystem:
     def __init__(self):
         ## FUZZY SETS PARA INPUT DE PESOS
-        self.current_weight = ctrl.Antecedent(np.arange(-0.8, 0.8, 0.01), 'current_weight')
-        self.weight_change = ctrl.Antecedent(np.arange(-0.08, 0.08, 0.001), 'weight_change')
+        self.current_weight = ctrl.Antecedent(np.arange(-1.0, 1.0, 0.01), 'current_weight')
+        self.weight_change = ctrl.Antecedent(np.arange(-0.1, 0.1, 0.001), 'weight_change')
         ## SET FUZZY PARA OUTPUT DE PESOS
-        self.next_weight = ctrl.Consequent(np.arange(-0.8, 0.8, 0.01), 'next_weight')
+        self.next_weight = ctrl.Consequent(np.arange(-1.0, 1.0, 0.01), 'next_weight')
         ## FUNCIONES DE MEMBRESIA PARA PESOS
-        self.current_weight['low'] = fuzz.trimf(self.current_weight.universe, [-0.8, -0.2, 0.4])
-        self.current_weight['high'] = fuzz.trimf(self.current_weight.universe, [-0.4, 0.2, 0.8])
-        self.weight_change['low'] = fuzz.trimf(self.weight_change.universe, [-0.008, -0.002, 0.004])
-        self.weight_change['high'] = fuzz.trimf(self.weight_change.universe, [-0.004, 0.002, 0.008])
-        self.next_weight['low'] = fuzz.trimf(self.next_weight.universe, [-0.8, -0.2, 0.4])
-        self.next_weight['high'] = fuzz.trimf(self.next_weight.universe, [-0.4, 0.2, 0.8])
+        self.current_weight['low'] = fuzz.trimf(self.current_weight.universe, [-1.0, -0.2, 0.4])
+        self.current_weight['high'] = fuzz.trimf(self.current_weight.universe, [-0.4, 0.2, 1.0])
+        self.weight_change['low'] = fuzz.trimf(self.weight_change.universe, [-0.1, -0.02, 0.04])
+        self.weight_change['high'] = fuzz.trimf(self.weight_change.universe, [-0.04, 0.02, 0.1])
+        self.next_weight['low'] = fuzz.trimf(self.next_weight.universe, [-1.0, -0.2, 0.4])
+        self.next_weight['high'] = fuzz.trimf(self.next_weight.universe, [-0.4, 0.2, 1.0])
         ## REGLAS DE INFERENCIA DE PESOS
         self.regla1 = ctrl.Rule(self.current_weight['low'] & self.weight_change['low'], self.next_weight['low'])
         self.regla2 = ctrl.Rule(self.current_weight['low'] & self.weight_change['high'], self.next_weight['low'])
