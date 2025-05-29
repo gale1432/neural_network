@@ -81,22 +81,22 @@ class FinalNetwork:
         db1 = (1/m)*np.sum(dZ1)
         return dW1, db1, dW2, db2, dW3, db3
     ## METHOD OF UPDATE THAT DOESNT USE FUZZY LOGIC
-    def update_params(self, dW1, db1, dW2, db2, dW3, db3, alpha):
+    """def update_params(self, dW1, db1, dW2, db2, dW3, db3, alpha):
         self.W1 = self.W1 - alpha * dW1
         self.b1 = self.b1 - alpha * db1
         self.W2 = self.W2 - alpha * dW2
         self.b2 = self.b2 - alpha * db2
         self.W3 = self.W3 - alpha * dW3
-        self.b3 = self.b3 - alpha * db3
+        self.b3 = self.b3 - alpha * db3"""
 
     ## METHOD OF UPDATE THAT USES FUZZY INFERENCE SYSTEMS
-    """def update_params(self, dW1, db1, dW2, db2, dW3, db3, alpha):
+    def update_params(self, dW1, db1, dW2, db2, dW3, db3, alpha):
         self.W1 = self.weight_system.weight_change_all(self.W1, alpha*dW1)
         self.b1 = self.bias_system.bias_change_all(self.b1, alpha*db1)
         self.W2 = self.weight_system.weight_change_all(self.W2, alpha*dW2)
         self.b2 = self.bias_system.bias_change_all(self.b2, alpha*db2)
         self.W3 = self.weight_system.weight_change_all(self.W3, alpha*dW3)
-        self.b3 = self.bias_system.bias_change_all(self.b3, alpha*db3, last_layer_bias=True)"""
+        self.b3 = self.bias_system.bias_change_all(self.b3, alpha*db3, last_layer_bias=True)
 
     def save_weights(self, dW1, db1, dW2, db2, dW3, db3, iter_number):
         self.weight_dict[str(iter_number)] = dict()
@@ -131,3 +131,9 @@ class FinalNetwork:
                 print(f"Accuracy:{self.get_accuracy(self.get_predictions(A3), Y)}")
         #return self.W1, self.b1, self.W2, self.b2, self.W3, self.b3
         return self.weight_dict
+
+    def evaluate(self, X, Y):
+        Z1, A1, Z2, A2, Z3, A3 = self.forward_prop(X)
+        accuracy = self.get_accuracy(self.get_predictions(A3), Y)
+        print(f"Accuracy:{accuracy}")
+        return accuracy
