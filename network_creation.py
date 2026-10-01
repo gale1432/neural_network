@@ -9,11 +9,11 @@ def nguyen_widrow(input_units, hidden_units):
 def create_initial_weights(input_units, hidden_units, beta):
     weight_matrix = list()
     for i in range(hidden_units):
-        cocaine_line = list()
+        layer_weights = list()
         for j in range(input_units):
             weight = random.uniform(-beta, beta)
-            cocaine_line.append(weight)
-        weight_matrix.append(np.array(cocaine_line, dtype=np.float64))
+            layer_weights.append(weight)
+        weight_matrix.append(np.array(layer_weights, dtype=np.float64))
     return np.array(weight_matrix)
 
 def create_initial_biases(hidden_units, beta):
